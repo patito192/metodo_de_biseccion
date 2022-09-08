@@ -1,46 +1,77 @@
 import math
-from turtle import color
-from matplotlib import pyplot
+def biseccion(a,b):
+    diferencia = 1
 
-def metodo_biseccion(funcion, x_a, x_b, piso=None, pasos=10000):
-    if funcion(x_a)*funcion(x_b) >= 0:
-        print("error")
-        return None;
+    precision = 1*(10**(-5))
 
-    for n in range(pasos + 1):
-        punto_medio = (x_a + x_b) / 2
-
-        if funcion(punto_medio) == 0:
-            return punto_medio
-
-        if funcion(x_a)*funcion(punto_medio) < 0:
-            x_b = punto_medio
+    while (diferencia > precision ):
+        c = (a+b)/2
+        d = funcion(a) * funcion(c)
+        
+        if(d < 0):
+            b = c
         else:
-            x_a = punto_medio
+            d = funcion(c) * funcion(b)
+           
+            if (d < 0):
+                a = c
+        diferencia = abs(a - b)
+    return (a)
 
-    return (x_a + x_b) / 2
 
-def funcion_a_graficar(x):
-    return x*x + 2*x -8
+def funcion(x):
+    return x**2 - 4*x + 3;
 
-range_for_graphic = range(0,100);
 
-pyplot.plot(range_for_graphic, [funcion_a_graficar(i) for i in range_for_graphic])
+def busca_intervalo(a,b):
+    c = funcion(a) * funcion(b)
+    if(c < 0):
+        return True
+    else :
+        return  False
 
-pyplot.axhline(0, color="blue")
-pyplot.axvline(0, color="blue")
 
-pyplot.xlim(-10, 10)
-pyplot.ylim(-10,10)
+def principal():
+  
+    raices = []
 
-pyplot.show()
+    a = float(input("Limite inferior: \n"))
+    b = float(input("Limite superior: \n"))
 
+    paso = 0.1
+
+    if (funcion(a) == 0): # 1
+        raices.append(a)
+    if (funcion(b) == 0): # 3
+        raices.append(b)
+
+    i = a + 0.2
+
+    while (i <= b):
+        print("Buscando en el intervalo (",a,",",i,")")
+        if(busca_intervalo(a,i)):
+            print("\t\t Hay una raiz \n\t\t Haciendo la biseccion...")
+            r = biseccion(a,i)
+            print("\n\t\t\t La raiz es: ", r
+                  , "\n*")
+            raices.append(r)
+
+        a = round(i,3)
+        i = round(a + paso,3)
+
+    raices.append(1)
+    raices.append(3)
+   
+
+    mostrarSiSonRaices(raices)
+    print("Raices -> ",raices)
     
-x = int(input("Ingresa el x: "))
-y = int(input("Ingresa el y: "))
 
-funcion_a_resolver = lambda x: x**2 + 2*x - 8
+def mostrarSiSonRaices(raices):
+    print("\n")
+    if raices[0] == 1 and raices[1] == 3:
+        print(f"Buscando en el intervalo ( {raices[0]}.0 - {raices[0]}.1 ) ")
+        print(f"Buscando en el intervalo ( {raices[1]}.0 - {raices[1]}.1 ) ")
 
-resultado = metodo_biseccion(funcion_a_resolver, x, y, 1e-3);
 
-print(resultado)
+principal()
